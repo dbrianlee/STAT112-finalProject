@@ -1,6 +1,6 @@
 ---
 title: "STAT112 - Spotify Final Project"
-author: "Brian Lee"
+author: "Brian Lee, Alex Ismail, Malek Kaloti"
 date: "3/10/2021"
 output: html_document
 ---
