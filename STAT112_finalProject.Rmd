@@ -9,23 +9,42 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## R Markdown
-
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r cars}
-summary(cars)
+```{r}
+#loading packages
+library(lubridate)
+library(dplyr)
+library(tidyverse)
 ```
 
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
+```{r}
+#loading data
+spotify <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-01-21/spotify_songs.csv')
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+## Prelim Graph
+
+```{r}
+prelim_graph <- spotify %>%
+  ggplot(aes(y = playlist_genre, x = track_popularity)) +
+  labs(title = "Song Popularity by Genre",
+       x = "", y = "",
+       subtitle = "Song popularity is measured from 0-100, with higher numbers being indiciative of more popularity.\nHighest median popularities belong to pop and latin with an overall median popularity of 40",
+       caption = "Alex Ismail, Malek Kaloti, Brian Lee") +
+  theme_classic() + # Choosing a theme
+  theme(plot.title.position = "plot",
+        plot.title = element_text(size = 20, face = "bold"),
+        plot.subtitle = element_text(size = 10, face = "italic")) +
+  geom_boxplot() +
+  geom_vline(aes(xintercept = median(track_popularity, na.rm = TRUE)), color = "blue") 
+
+prelim_graph
+```
+
+
+
+
+
+
+
+
 
