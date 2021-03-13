@@ -54,23 +54,6 @@ prelim_graph <- spotify %>%
 prelim_graph
 ```
 
-
-```{r fig.width=10, fig.height=8}
-feature_names <- names(spotify)[12:23]
-
-density_plot <- spotify %>%
-  select(c('playlist_genre', feature_names)) %>%
-  pivot_longer(cols = feature_names) %>%
-  ggplot(aes(x = value)) +
-  geom_density(aes(color = playlist_genre), alpha = 0.5) +
-  facet_wrap(~name, ncol = 3, scales = 'free') +
-  labs(title = 'Spotify Audio Feature Density - by Genre',
-       x = '', y = 'density') +
-  theme(axis.text.y = element_blank())
-
-ggplotly(density_plot)
-```
-
 ```{r}
 spotify %>% 
   filter(track_popularity >= 75) %>%
@@ -118,7 +101,7 @@ spotify_rap %>%
         plot.subtitle = element_text(size = 10, face = "italic"))
 ```
 
-```{r}
+```{r fig.width = 9, fig.length = 6}
 spotify %>% 
   mutate(track_name_lower = str_to_lower(track_name),
          remix = str_detect(track_name_lower, "Remix"),
@@ -157,7 +140,6 @@ randb %>%
   transition_states(playlist_subgenre, transition_length = 3, state_length = 1)
 #get rid of axes, make subtitle descriptive
 anim_save("randb_density.gif")
-
 ```
 
 ```{r}
@@ -176,7 +158,7 @@ randb %>%
   filter(playlist_subgenre == c("hip pop", "urban contemporary")) %>%
   summarise_at(c("track_popularity", "danceability", "energy", "key", "loudness", "mode", "speechiness", "instrumentalness", "liveness", "valence", "tempo", "duration_ms"), mean, na.rm = TRUE) %>%
   knitr::kable() 
-# maybe somehow graph this??
+# Add graph
 ```
 
 
