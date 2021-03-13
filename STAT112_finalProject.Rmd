@@ -19,6 +19,9 @@ library(tidyverse)
 ```{r}
 #loading data
 spotify <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-01-21/spotify_songs.csv')
+
+spotify_rap <- spotify %>% 
+  filter(playlist_genre == "rap")
 ```
 
 ## Prelim Graph
@@ -42,7 +45,28 @@ prelim_graph
 
 
 
-
+```{r}
+spotify %>% 
+  mutate(track_name_lower = str_to_lower(track_name),
+         remix = str_detect(track_name_lower, "Remix"),
+         feature = str_detect(track_name_lower, "feat"),
+         ma_prep = remix|feature,
+         ma_prep2 = replace_na(ma_prep, FALSE),
+         multiple_artists = if_else(ma_prep2, true = "Multiple Artists", false = "One Artist"),
+         popular = track_popularity > 75) %>% 
+  group_by(multiple_artists, playlist_genre) %>% 
+  summarize(prop_pop = mean(popular)*100) %>% 
+  group_by(str_detect(playlist_genre, "rap")) %>% 
+  ggplot() +
+  geom_col(aes(x = multiple_artists, y = prop_pop)) +
+  facet_wrap(~playlist_genre) +
+  labs(title = "Popularity Rate of Songs Containing Mulitple Artists Across Genre",
+       x = "", y = "Percent Popular") +
+  theme_classic() + # Choosing a theme
+  theme(plot.title.position = "plot",
+        plot.title = element_text(size = 20, face = "bold"),
+        plot.subtitle = element_text(size = 10, face = "italic"))
+```
 
 
 
