@@ -35,11 +35,39 @@ randb <- spotify %>%
 
 # Introduction & Background
 
-Why did we do an analysis on spotify? Why is the data significant & why should people care? In troduce the data to audience
+Why did we do an analysis on spotify? Why is the data significant & why should people care? Introduce the data to audience
+
+Using this dataset, we hope to study to technicalities of music anbd
 
 Aside from personal interest...
 
-How has popularity changed over time? make a line graph gif (withe a line for each genre) with date on the x axis and popularity on the y axis maybe? 
+## Data Collection
+Data retrieved from github, (add link).
+https://github.com/rfordatascience/tidytuesday/blob/faca0b6bd282998693007c329e3f4b917a5fd7a8/data/2020/2020-01-21/readme.md
+Who collected the data and what prupose does it serve? Who funded the data collection? Any possible biases?
+What are teh implications of the analysis of this dataset, ethical or otherwise?
+
+## How has the popularity of genres changed over time?
+
+```{r}
+genre_pop <- spotify %>%
+  filter(track_popularity >= 75) %>%
+    mutate(ymd_release = ymd(track_album_release_date),
+         year = year(ymd_release)) %>%
+  group_by(year, playlist_genre) %>%
+  summarize(avg_popularity = mean(track_popularity)) %>%
+  ggplot(aes(x = year, y = avg_popularity, color = playlist_genre)) +
+  geom_point() +
+  labs(title="Average song popularity by genre per year",
+       subtitle = "Overall, as music becomes more accessible, average peopulatity across all genres is on the rise.",
+       x = "",
+       y = "",
+       color = "Genre") +
+  theme_classic()
+
+ggplotly(genre_pop)
+```
+
 
 ```{r}
 prelim_graph <- spotify %>%
@@ -58,23 +86,7 @@ prelim_graph <- spotify %>%
 prelim_graph
 ```
 
-```{r}
-spotify %>% 
-  filter(track_popularity >= 75) %>%
-ggplot(aes(x = track_popularity, y = playlist_genre)) +
-  labs(x = "Popularity", y = "Playlist Genre") +
-  geom_density_ridges() + 
-  theme_ridges()
-#get rid of axes, add a more descriptive subtitle
-```
 
-
-
-# Data Collection
-Data retrieved from github, (add link).
-https://github.com/rfordatascience/tidytuesday/blob/faca0b6bd282998693007c329e3f4b917a5fd7a8/data/2020/2020-01-21/readme.md
-Who collected the data and what prupose does it serve? Who funded the data collection? Any possible biases?
-What are teh implications of the analysis of this dataset, ethical or otherwise?
 
 
 # Analysis!
@@ -148,7 +160,7 @@ Above are the top 10 most popular songs in the R&B genre. We can see that all of
 
 ### Which subgenres have the most popular songs?
 
-In the exploratory phase of my analysis of the R&B genre, the most obvious characteristic of a song in the R&B genre was a song's subgenre. Are certain genres more likely to have more popular songs because some have more fans and listeners than others? In the densitly plot below, we see that this is the case -- Neo-Soul and New Jack Swing have the highest quantity of popular songs. 
+In the exploratory phase of my analysis of the R&B genre, the most obvious characteristic of a song in the R&B genre was a song's subgenre. Are certain genres more likely to have more popular songs because some have more fans and listeners than others? In the density plot below, we see that this is the case -- Neo-Soul and New Jack Swing have the highest quantity of popular songs. 
 
 ```{r fig.width = 7, fig.length = 5, eval = FALSE}
 randb %>% 
@@ -159,7 +171,8 @@ randb %>%
        subtitle = "This density plot only includes songs with a popularity of >=75.\nIt seems that Neo-Soul and New Jack Swing have the most popular songs.\n\nR&B Subgenre: {closest_state}",
        x = "Track Popularity",
        y = "",
-       fill = "R&B subgenre") +
+       fill = "R&B subgenre",
+       caption = "Visualization created by Brian Lee") +
   transition_states(playlist_subgenre, transition_length = 3, state_length = 1)
 #get rid of axes, make subtitle descriptive
 anim_save("randb_density.gif")
@@ -184,8 +197,7 @@ Despite the large density curves, on average, hip pop and urban contemporary are
 
 A quick Google search will reveal that both Neo-Soul and New Jack Swing were subgenres of R&B that were popular during the 1980's/90's. Their large density curves could be due to this fact. Because the technology for household high quality handheld microphones and producing equipment was not in abundance like it is now, artists had to rely on label companies and managers for the funding to acquire the money for studios and expensive equipment, thus leading to less music being produced. Additionally, because labeling agencies and managerial agencies essentially "invested" in discovered artists whom they knew they would get a high profit margin from, the discovered artists who were given a platform by these agencies were more likely to be successful. With a smaller pool of music and more popular songs making up that small poool of music, large density curves such as the ones we see in the visualization above for Neo-Soul and New Jack Swing are possible, and could serve as an explanation for the difference in the quantity between the four genres.
 
-
-As I move forward in my analysis to look at the specific characteristics of popular R&B songs, I will restrict myself to the two subgenres with more cases to look at and my person two favorite subegenres -- Hip-Pop and Urban Contemporary.
+As I move forward in my analysis to look at the specific characteristics of popular R&B songs, I will restrict myself to the two subgenres with more cases to look at and my person two favorite subgenres -- Hip-Pop and Urban Contemporary.
 
 ### Taking a closer look at the specific characteristis of popular songs in the Hip-Pop and Urban Contemporary Subgenres
 
@@ -193,7 +205,7 @@ As I move forward in my analysis to look at the specific characteristics of popu
 randb %>%
   group_by(playlist_subgenre) %>%
   filter(playlist_subgenre == c("hip pop", "urban contemporary")) %>%
-  summarise_at(c("track_popularity", "danceability", "energy", "key", "loudness", "mode", "speechiness", "instrumentalness", "liveness", "valence", "tempo", "duration_ms"), mean, na.rm = TRUE) %>%
+  summarise_at(c("track_popularity", "danceability", "energy", "speechiness", "instrumentalness", "valence"), mean, na.rm = TRUE) %>%
   knitr::kable() 
 # Add graph
 ```
