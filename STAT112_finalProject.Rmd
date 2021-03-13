@@ -23,6 +23,14 @@ library(gifski)        # for creating the gif (don't need to load this library e
 ```{r}
 #loading data
 spotify <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-01-21/spotify_songs.csv')
+
+spotify_rap <- spotify %>% 
+  filter(playlist_genre == "rap")
+
+randb <- spotify %>%
+  filter(playlist_genre == "r&b") %>%
+  select(-track_id, - track_album_id, -playlist_id) %>%
+  filter(track_popularity >= 75)
 ```
 
 # Introduction & Background
@@ -36,7 +44,7 @@ prelim_graph <- spotify %>%
        x = "", y = "",
        subtitle = "Song popularity is measured from 0-100, with higher numbers being indiciative of more popularity.\nHighest median popularities belong to pop and latin with an overall median popularity of 40",
        caption = "Alex Ismail, Malek Kaloti, Brian Lee") +
-  theme_classic() + # Choosing a theme
+  theme_classic() + 
   theme(plot.title.position = "plot",
         plot.title = element_text(size = 20, face = "bold"),
         plot.subtitle = element_text(size = 10, face = "italic")) +
@@ -79,15 +87,66 @@ ggplot(aes(x = track_popularity, y = playlist_genre)) +
 Data retrieved from github, (add link).
 
 
-# R&B Music: an Analysis
-```{r}
-randb <- spotify %>%
-  filter(playlist_genre == "r&b") %>%
-  select(-track_id, - track_album_id, -playlist_id) %>%
-  filter(track_popularity >= 75)
+# Analysis!
 
-randb
+## Rap
+
+```{r}
+spotify_rap %>% 
+  mutate(Rounded_Danceability = round(danceability, digits = 1),
+         Rounded_Energy = round(energy, digits = 1),
+         Rounded_Speechiness = round(speechiness, digits = 1),
+         Rounded_Instrumental = round(instrumentalness, digits = 1),
+         popular = track_popularity > 75) %>% 
+  pivot_longer(cols = starts_with("Rounded"),
+               names_to = "Stat1",
+               values_to = "Rounded_Value") %>% 
+  group_by(Stat1, Rounded_Value) %>% 
+  summarize(Pop_Rate = mean(popular)*100) %>% 
+  mutate(Stat = fct_recode(Stat1, 
+                             Danceability = "Rounded_Danceability",
+                             Energy = "Rounded_Energy",
+                             Speechiness = "Rounded_Speechiness",
+                             Instrumental = "Rounded_Instrumental")) %>% 
+  ggplot(aes(x = Rounded_Value, y = Pop_Rate)) +
+  geom_line(aes(color = Stat)) +
+  labs(title = "Popularity of Rap Songs by Song Characteristic",
+       x = "", y = "Percent Popular", color = "Song Statistic") +
+  theme_classic() + 
+  theme(plot.title.position = "plot",
+        plot.title = element_text(size = 20, face = "bold"),
+        plot.subtitle = element_text(size = 10, face = "italic"))
 ```
+
+```{r}
+spotify %>% 
+  mutate(track_name_lower = str_to_lower(track_name),
+         remix = str_detect(track_name_lower, "Remix"),
+         feature = str_detect(track_name_lower, "feat"),
+         ma_prep = remix|feature,
+         ma_prep2 = replace_na(ma_prep, FALSE),
+         multiple_artists = if_else(ma_prep2, true = "Multiple Artists", false = "One Artist"),
+         popular = track_popularity > 75) %>% 
+  group_by(multiple_artists, playlist_genre) %>% 
+  summarize(prop_pop = mean(popular)*100) %>% 
+  mutate(genre = fct_relevel(playlist_genre, "rap")) %>% 
+  ggplot() +
+  geom_col(aes(x = multiple_artists, y = prop_pop)) +
+  facet_wrap(~genre) +
+  labs(title = "Popularity of Songs Containing Mulitple Artists Across Genre",
+       x = "", y = "Percent of Songs Popular") +
+  theme_classic() + 
+  theme(plot.title.position = "plot",
+        plot.title = element_text(size = 20, face = "bold"),
+        plot.subtitle = element_text(size = 10, face = "italic"))
+```
+
+
+## R&B
+```{r}
+head(randb)
+```
+
 
 ```{r fig.width = 7, fig.length = 5, eval = FALSE}
 randb %>% 
@@ -100,10 +159,10 @@ randb %>%
 anim_save("randb_density.gif")
 
 ```
+
 ```{r}
 knitr::include_graphics("randb_density.gif")
 ```
-
 
 
 Why do hip pop and urban contemp have such similar density curves? For this section I want to look at the features of these two genres specifically.
@@ -119,8 +178,6 @@ randb %>%
   knitr::kable() 
 # maybe somehow graph this??
 ```
-
-
 
 
 
