@@ -1,5 +1,5 @@
 ---
-title: "STAT112 - Spotify Final Project"
+title: "What makes a song popular?"
 author: "Alex Ismail, Malek Kaloti, Brian Lee"
 date: "3/10/2021"
 output: html_document
@@ -29,13 +29,17 @@ spotify_rap <- spotify %>%
 
 randb <- spotify %>%
   filter(playlist_genre == "r&b") %>%
-  select(-track_id, - track_album_id, -playlist_id) %>%
+  select(-track_id, - track_album_id, -playlist_id, -playlist_name) %>%
   filter(track_popularity >= 75)
 ```
 
 # Introduction & Background
 
 Why did we do an analysis on spotify? Why is the data significant & why should people care? In troduce the data to audience
+
+Aside from personal interest...
+
+How has popularity changed over time? make a line graph gif (withe a line for each genre) with date on the x axis and popularity on the y axis maybe? 
 
 ```{r}
 prelim_graph <- spotify %>%
@@ -68,6 +72,9 @@ ggplot(aes(x = track_popularity, y = playlist_genre)) +
 
 # Data Collection
 Data retrieved from github, (add link).
+https://github.com/rfordatascience/tidytuesday/blob/faca0b6bd282998693007c329e3f4b917a5fd7a8/data/2020/2020-01-21/readme.md
+Who collected the data and what prupose does it serve? Who funded the data collection? Any possible biases?
+What are teh implications of the analysis of this dataset, ethical or otherwise?
 
 
 # Analysis!
@@ -126,10 +133,21 @@ spotify %>%
 
 
 ## R&B
-```{r}
-head(randb)
-```
 
+### Why R&B?
+
+In this section, I want to take a closer look at one of my favorite genres of music, R&B. I think I love it so much because it's often good music to unwind to -- it's smooth, slow, and relaxing. I also love its versatility! R&B can fit the mood of anything from a gloomy, rainy day to a bright, sunny day. But why? What characteristics make R&B such a great genre to listen to? Using the Spotify dataset and some visualizations which look at the specific characteristics of the most popular R&B songs (songs with a popularity rating of above 75), I hope to come closer to answering these questions.
+
+```{r}
+randb %>%
+  group_by(track_name) %>%
+  arrange(desc(track_popularity)) %>%
+  head(12)
+```
+Above are the top 10 most popular songs in the R&B genre. We can see that all of them were released in 2019 and all categorized under my two favorite two subgenres of R&B, Urban Contemporary and Hip Pop. All of them also boast a danceability score of above 0.5, with most of them (with the exception of Maroon 5's *Memories* and Billie Eilish's *everything i wanted*) having energy scores of above 0.5. We can also see that across the board, all 10 songs have low speechiness and instrumentalness scores (with the exception of Billie Eilish's *everything i wanted*. Interestingly, all of the songs fall within a valence of 0.2-0.6. The other characteristics are quite varied. So, for the purposes of my analysis of the R&B genre, I will only focus on the song characteristics that have clear trends across the genre -- danceabiility, energy, speechiness, instrumentalness, valence, 
+
+In terms of song tempo, most of the songs have a 
+In this section of the analysis, I will 
 
 ```{r fig.width = 7, fig.length = 5, eval = FALSE}
 randb %>% 
@@ -146,8 +164,8 @@ anim_save("randb_density.gif")
 knitr::include_graphics("randb_density.gif")
 ```
 
-
-Why do hip pop and urban contemp have such similar density curves? For this section I want to look at the features of these two genres specifically.
+Finally, we can see from the density plot above that the trends for hip pop and urban contemporary. In the following graph, I would like to 
+Why do hip pop and urban contemporary  have such similar density curves? For this section I want to look at the features of these two genres specifically.
 
 
 
@@ -160,6 +178,12 @@ randb %>%
   knitr::kable() 
 # Add graph
 ```
+
+# What now? Why is our analysis important?
+As it becomes easier to produce and release music from one's own bedroom and streaming platforms such as Apple Music and Spotify increasingly making music accessible to everyone, we believe our analysis has important implications which can help listeners find new songs that they like and help platforms build algorithms that give better and more relevant song recommendations to its users. Thanks to streaming platforms such as Spotify and Apple Music, small creators are also given a platform for creative release. Our analyses of pop, rap, and R&B, can also help small artists grow their own platforms to cater to the interests of specific audiences. In a time such as now when the consumption of art (whether it be in the form of movies, music, or television), is essential to one's mental wellbeing, our analysis can help boost these efforts. By asking the question, "What makes a song in a given genre popular?" We taken a close look at 
+
+
+
 
 
 
