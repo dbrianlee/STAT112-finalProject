@@ -152,11 +152,12 @@ In this section, I want to take a closer look at one of my favorite genres of mu
 
 ```{r}
 randb %>%
-  group_by(track_name) %>%
+  select(track_name, track_artist, playlist_genre, playlist_subgenre, track_popularity, danceability, energy, loudness, mode, speechiness, acousticness, instrumentalness, liveness, valence, duration_ms) %>%
   arrange(desc(track_popularity)) %>%
-  head(12)
+  head(12) %>%
+  knitr::kable() 
 ```
-Above are the top 10 most popular songs in the R&B genre. We can see that all of them were released in 2019 and all categorized under my two favorite two subgenres of R&B, Urban Contemporary and Hip Pop. All of them also boast a danceability score of above 0.5, with most of them (with the exception of Maroon 5's *Memories* and Billie Eilish's *everything i wanted*) having energy scores of above 0.5. We can also see that across the board, all 10 songs have low speechiness and instrumentalness scores (with the exception of Billie Eilish's *everything i wanted*. Interestingly, all of the songs fall within a valence of 0.2-0.6. The other characteristics are quite varied. So, for the purposes of my analysis of the R&B genre, I will only focus on the song characteristics that have clear trends across the genre -- danceabiility, energy, speechiness, instrumentalness, and valence.
+Above are the top 10 most popular songs in the R&B genre (12 songs were pulled from the dataset to account for 2 songs that were each in 2 different subgenres -- Arizona Zeravas' *Roxanne* and The Weeknd's *Blinding Lights*. We can see that all of them were released in 2019 and all categorized under my two favorite two subgenres of R&B, Urban Contemporary and Hip Pop. All of them also boast a danceability score of above 0.5, with most of them (with the exception of Maroon 5's *Memories* and Billie Eilish's *everything i wanted*) having energy scores of above 0.5. We can also see that across the board, all 10 songs have low speechiness and instrumentalness scores (with the exception of Billie Eilish's *everything i wanted*. Interestingly, all of the songs fall within a valence of 0.2-0.6. The other characteristics are quite varied. So, for the purposes of my analysis of the R&B genre, I will only focus on the song characteristics that have clear trends across the genre -- danceabiility, energy, speechiness, instrumentalness, and valence.
 
 ### Which subgenres have the most popular songs?
 
