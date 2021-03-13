@@ -35,11 +35,39 @@ randb <- spotify %>%
 
 # Introduction & Background
 
-Why did we do an analysis on spotify? Why is the data significant & why should people care? In troduce the data to audience
+Why did we do an analysis on spotify? Why is the data significant & why should people care? Introduce the data to audience
+
+Using this dataset, we hope to study to technicalities of music anbd
 
 Aside from personal interest...
 
-How has popularity changed over time? make a line graph gif (withe a line for each genre) with date on the x axis and popularity on the y axis maybe? 
+## Data Collection
+Data retrieved from github, (add link).
+https://github.com/rfordatascience/tidytuesday/blob/faca0b6bd282998693007c329e3f4b917a5fd7a8/data/2020/2020-01-21/readme.md
+Who collected the data and what prupose does it serve? Who funded the data collection? Any possible biases?
+What are teh implications of the analysis of this dataset, ethical or otherwise?
+
+## How has the popularity of genres changed over time?
+
+```{r}
+genre_pop <- spotify %>%
+  filter(track_popularity >= 75) %>%
+    mutate(ymd_release = ymd(track_album_release_date),
+         year = year(ymd_release)) %>%
+  group_by(year, playlist_genre) %>%
+  summarize(avg_popularity = mean(track_popularity)) %>%
+  ggplot(aes(x = year, y = avg_popularity, color = playlist_genre)) +
+  geom_point() +
+  labs(title="Average song popularity by genre per year",
+       subtitle = "Overall, as music becomes more accessible, average peopulatity across all genres is on the rise.",
+       x = "",
+       y = "",
+       color = "Genre") +
+  theme_classic()
+
+ggplotly(genre_pop)
+```
+
 
 ```{r}
 prelim_graph <- spotify %>%
@@ -58,23 +86,7 @@ prelim_graph <- spotify %>%
 prelim_graph
 ```
 
-```{r}
-spotify %>% 
-  filter(track_popularity >= 75) %>%
-ggplot(aes(x = track_popularity, y = playlist_genre)) +
-  labs(x = "Popularity", y = "Playlist Genre") +
-  geom_density_ridges() + 
-  theme_ridges()
-#get rid of axes, add a more descriptive subtitle
-```
 
-
-
-# Data Collection
-Data retrieved from github, (add link).
-https://github.com/rfordatascience/tidytuesday/blob/faca0b6bd282998693007c329e3f4b917a5fd7a8/data/2020/2020-01-21/readme.md
-Who collected the data and what prupose does it serve? Who funded the data collection? Any possible biases?
-What are teh implications of the analysis of this dataset, ethical or otherwise?
 
 
 # Analysis!
@@ -158,17 +170,23 @@ randb %>%
   arrange(desc(track_popularity)) %>%
   head(12)
 ```
-Above are the top 10 most popular songs in the R&B genre. We can see that all of them were released in 2019 and all categorized under my two favorite two subgenres of R&B, Urban Contemporary and Hip Pop. All of them also boast a danceability score of above 0.5, with most of them (with the exception of Maroon 5's *Memories* and Billie Eilish's *everything i wanted*) having energy scores of above 0.5. We can also see that across the board, all 10 songs have low speechiness and instrumentalness scores (with the exception of Billie Eilish's *everything i wanted*. Interestingly, all of the songs fall within a valence of 0.2-0.6. The other characteristics are quite varied. So, for the purposes of my analysis of the R&B genre, I will only focus on the song characteristics that have clear trends across the genre -- danceabiility, energy, speechiness, instrumentalness, valence, 
+Above are the top 10 most popular songs in the R&B genre. We can see that all of them were released in 2019 and all categorized under my two favorite two subgenres of R&B, Urban Contemporary and Hip Pop. All of them also boast a danceability score of above 0.5, with most of them (with the exception of Maroon 5's *Memories* and Billie Eilish's *everything i wanted*) having energy scores of above 0.5. We can also see that across the board, all 10 songs have low speechiness and instrumentalness scores (with the exception of Billie Eilish's *everything i wanted*. Interestingly, all of the songs fall within a valence of 0.2-0.6. The other characteristics are quite varied. So, for the purposes of my analysis of the R&B genre, I will only focus on the song characteristics that have clear trends across the genre -- danceabiility, energy, speechiness, instrumentalness, and valence.
 
-In terms of song tempo, most of the songs have a 
-In this section of the analysis, I will 
+### Which subgenres have the most popular songs?
+
+In the exploratory phase of my analysis of the R&B genre, the most obvious characteristic of a song in the R&B genre was a song's subgenre. Are certain genres more likely to have more popular songs because some have more fans and listeners than others? In the density plot below, we see that this is the case -- Neo-Soul and New Jack Swing have the highest quantity of popular songs. 
 
 ```{r fig.width = 7, fig.length = 5, eval = FALSE}
 randb %>% 
-  ggplot(aes(x = track_popularity, fill = playlist_subgenre, color = playlist_subgenre)) +
+  ggplot(aes(x = track_popularity, fill = playlist_subgenre)) +
   geom_density(alpha = 0.1) +
-  labs(title = "ADD TITLE",
-       subtitle = "R&B Subgenre: {closest_state}") +
+  theme_classic() +
+  labs(title = "Do certain subgenres have more popular songs?",
+       subtitle = "This density plot only includes songs with a popularity of >=75.\nIt seems that Neo-Soul and New Jack Swing have the most popular songs.\n\nR&B Subgenre: {closest_state}",
+       x = "Track Popularity",
+       y = "",
+       fill = "R&B subgenre",
+       caption = "Visualization created by Brian Lee") +
   transition_states(playlist_subgenre, transition_length = 3, state_length = 1)
 #get rid of axes, make subtitle descriptive
 anim_save("randb_density.gif")
@@ -178,24 +196,44 @@ anim_save("randb_density.gif")
 knitr::include_graphics("randb_density.gif")
 ```
 
-Finally, we can see from the density plot above that the trends for hip pop and urban contemporary. In the following graph, I would like to 
-Why do hip pop and urban contemporary  have such similar density curves? For this section I want to look at the features of these two genres specifically.
+In the density plot above, Neo-Soul and New Jack Swing both seem to have a lot of popular songs on the lower end of the spectrum (75-85), with Urban Contemporary and Hip Pop following similar trends, but in comparison to the other two genres, their density curves are not as large, signaling that the former two genres have more songs classified as "popular" than teh latter two.
 
+I believe that this trend could be occurring because of the huge increase in the production of hip pop and urban contemporary music. With streaming services such as Spotify making it easier than ever for small creators to attain platforms and with the advancement of technology making it easier to produce and release music from one's own bedroom, this may be because of the oversaturation of the music industry -- there are more songs being released than ever.
 
+```{r}
+randb %>%
+  group_by(playlist_subgenre) %>%
+  summarize(num_of_songs = n(), avg_pop = mean(track_popularity)) %>%
+  knitr::kable() 
+```
 
+Despite the large density curves, on average, hip pop and urban contemporary are slightly more popular than the Neo-Soul and New Jack Swing. Another interesting observation we can make is the sheer lack of popular songs for Neo-Soul and New Jack Swing. 
+
+A quick Google search will reveal that both Neo-Soul and New Jack Swing were subgenres of R&B that were popular during the 1980's/90's. Their large density curves could be due to this fact. Because the technology for household high quality handheld microphones and producing equipment was not in abundance like it is now, artists had to rely on label companies and managers for the funding to acquire the money for studios and expensive equipment, thus leading to less music being produced. Additionally, because labeling agencies and managerial agencies essentially "invested" in discovered artists whom they knew they would get a high profit margin from, the discovered artists who were given a platform by these agencies were more likely to be successful. With a smaller pool of music and more popular songs making up that small poool of music, large density curves such as the ones we see in the visualization above for Neo-Soul and New Jack Swing are possible, and could serve as an explanation for the difference in the quantity between the four genres.
+
+As I move forward in my analysis to look at the specific characteristics of popular R&B songs, I will restrict myself to the two subgenres with more cases to look at and my person two favorite subgenres -- Hip-Pop and Urban Contemporary.
+
+### Taking a closer look at the specific characteristis of popular songs in the Hip-Pop and Urban Contemporary Subgenres
 
 ```{r}
 randb %>%
   group_by(playlist_subgenre) %>%
   filter(playlist_subgenre == c("hip pop", "urban contemporary")) %>%
-  summarise_at(c("track_popularity", "danceability", "energy", "key", "loudness", "mode", "speechiness", "instrumentalness", "liveness", "valence", "tempo", "duration_ms"), mean, na.rm = TRUE) %>%
+  summarise_at(c("track_popularity", "danceability", "energy", "speechiness", "instrumentalness", "valence"), mean, na.rm = TRUE) %>%
   knitr::kable() 
 # Add graph
 ```
 
 # What now? Why is our analysis important?
-As it becomes easier to produce and release music from one's own bedroom and streaming platforms such as Apple Music and Spotify increasingly making music accessible to everyone, we believe our analysis has important implications which can help listeners find new songs that they like and help platforms build algorithms that give better and more relevant song recommendations to its users. Thanks to streaming platforms such as Spotify and Apple Music, small creators are also given a platform for creative release. Our analyses of pop, rap, and R&B, can also help small artists grow their own platforms to cater to the interests of specific audiences. In a time such as now when the consumption of art (whether it be in the form of movies, music, or television), is essential to one's mental wellbeing, our analysis can help boost these efforts. By asking the question, "What makes a song in a given genre popular?" We taken a close look at 
 
+As it becomes easier to produce and release music from one's own bedroom and streaming platforms such as Apple Music and Spotify increasingly making music accessible to everyone, we believe our analysis has important implications which can help listeners find new songs that they like and help platforms build algorithms that give better and more relevant song recommendations to its users. 
+
+### A disclaimer: Correlation does no equal causation.
+
+Of course, carrelation does not equal causation. Just because the 
+
+## A Conclusion
+Thanks to streaming platforms such as Spotify and Apple Music, small creators are also given a platform for creative release. Our analyses of pop, rap, and R&B, can also help small artists grow their own platforms to cater to the interests of specific audiences. In a time such as now when the consumption of art (whether it be in the form of movies, music, or television), is essential to one's mental wellbeing, our analysis can help boost these efforts. By asking the question, "What makes a song in a given genre popular?" We have taken a close look at the specific characteristics of songs with a popularity rating of 75 or higher.
 
 
 
