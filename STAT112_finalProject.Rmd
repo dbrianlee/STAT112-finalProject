@@ -39,9 +39,12 @@ randb <- spotify %>%
 A noticeable trend in the entertainment industry has been the transformation from physical to digitalized content. Newspapers are replaced with online articles, Netflix replaced Blockbuster, and online music streaming sites like Spotify have taken over traditonal music media as the primary source of music for millions. In addition to expanding the reach of music to new people, the transition to using Spotify has come with new ways to analyze music tastes, both individually and as a population. Spotify users have access to new daily playlists tailor made for them, in addition to having suggested music based of the data provided to Spotify of listening habits. 
 =======
 
-Who hasn't been in a "aaah, I know this song" moment but didn't know where they knew it from?  Or even worse, singing the lyrics of a song you hate because you couldn't help but memorize them since the track was playing everywhere. Chances are, you heard that tune on the car radio when your phone's battery died or maybe even at the store when you went to buy a charger for your phone. The 
+Who hasn't been in a "aaah, I know this song" moment but didn't know where they knew it from?  Or even worse, singing the lyrics of a song you hate because you couldn't help but memorize them since the track was playing everywhere. Chances are, you heard that tune on the car radio when your phone's battery died or maybe even at the store when you went to buy a charger for your phone. 
+
+
+
+The 
 Why did we do an analysis on spotify? Why is the data significant & why should people care? Introduce the data to audience
->>>>>>> 3f1051172bfaf99487cf77ef4fc4a70ecf46cc06
 
 
 ## Data Collection
@@ -50,7 +53,7 @@ https://github.com/rfordatascience/tidytuesday/blob/faca0b6bd282998693007c329e3f
 
 Using data provided by Spotify, we will investigate how certain aspects of a song, such as genre, subgenre, release date, and other more complex measurements correlate to how popular a song is according to Spotify. Popularity is rated on a scale to 100 with the most popular songs on Spotify as of February 2020 will have a score near 100. We identified popularity scores greater than 75 to be a convenient threshold to deem a song "popular".
 
-
+implications of using the data, any biases in the data?
 
 ## How has the popularity of genres changed over time?
 
