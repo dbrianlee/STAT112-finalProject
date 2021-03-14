@@ -11,12 +11,13 @@ output:
     df_print: paged
     code_download: true
     code_folding: hide
+    theme: cosmo
 
       
 ---
 
 ```{r setup, include=FALSE}
-#knitr::opts_chunk$set(echo = TRUE, error=TRUE, message=FALSE, warning=FALSE)
+knitr::opts_chunk$set(echo = TRUE, error=TRUE, message=FALSE, warning=FALSE)
 ```
 
 ```{r}
@@ -24,10 +25,10 @@ output:
 library(lubridate)
 library(dplyr)
 library(tidyverse)
-library(ggridges) # for joy plots
 library(plotly) 
 library(gganimate)     # for adding animation layers to ggplots
 library(gifski)        # for creating the gif (don't need to load this library every time,but need it installed)
+library(gt) 
 ```
 
 ```{r}
@@ -51,11 +52,9 @@ A noticeable trend in the entertainment industry has been the transformation fro
 
 Retrieved from a past Tidy Tuesday dataset, we will be using data from Spotify for our analysis. The link to the repository can be can be accessed [here](https://github.com/rfordatascience/tidytuesday/blob/faca0b6bd282998693007c329e3f4b917a5fd7a8/data/2020/2020-01-21/readme.md)
 
-Using data provided by Spotify, we will investigate how certain aspects of a song, such as genre, subgenre, release date, and other more complex measurements correlate to how popular a song is according to Spotify. Popularity is rated on a scale to 100 with the most popular songs on Spotify as of February 2020 will have a score near 100. We identified popularity scores greater than 75 to be a convenient threshold to deem a song "popular".
+Using data collected by Spotify, we will investigate how certain aspects of a song, such as genre, subgenre, release date, and other more complex measurements correlate to how popular a song is. Popularity is rated on a scale to 100 with the most popular songs on Spotify as of February 2020 will have a score near 100. We identified popularity scores greater than 75 to be a convenient threshold to deem a song "popular".
 
-implications of using the data, any biases in the data?
-
-# A General Analysis
+# A Preliminary Analysis
 
 ## How has the popularity of genres changed over time?
 
@@ -78,7 +77,7 @@ genre_pop <- spotify %>%
 ggplotly(genre_pop)
 ```
 
-The graph above shows how track popularity has trended by genre since. Though Spotify has a wide variety of songs, based on the plot rock is the only genre that has any significant foundations of popular songs from before the 1980s and 90s. Since then however, song popularity across every genre has experienced exponential growth in popularity, most notably with the introduction of pop and edm. As music becomes easier to produce and release from informal settings, today, a studio and expensive equipment are not necessary to make good music. This is also show in the visualization above with the quantity of cases dramtically increasing with teh advent of teh 21st century.
+The graph above shows how track popularity has trended by genre since. Though Spotify has a wide variety of songs, based on the plot rock is the only genre that has any significant foundations of popular songs from before the 1980s and 90s. Since then however, song popularity across every genre has experienced exponential growth in popularity, most notably with the introduction of pop and edm. As music becomes easier to produce and release from informal settings, today, a studio and expensive equipment are not necessary to make good music. This is also show in the visualization above with the quantity of cases dramatically increasing with the advent of the 21st century.
 
 
 ## How does does song popularity vary based on genre?
@@ -104,6 +103,8 @@ The box plot above compares distribution of song popularity by genre again, howe
 
 
 # Analysis: Diving deeper into our favorite genres
+
+For the purposes of this analysis, each of us will carry out an analysis on our favorite genres and focus primarily on these genres -- Rap, Pop, and R&B. Even just by studying these three genres, we believe that in future reproductions of our analysis, similar code and analytic techniques can also be applied to the other three genres, rock, latin, and EDM. By honing our energy into these three points, we believe there is more opportunity for specificity and precision in our analysis.
 
 ## Rap
 
@@ -176,6 +177,38 @@ ggplotly(Multiple_Artist_Graph)
 Rap had the largest change between songs with multiple artists and song with only one, with a gap of 10%. Based on other genres' disparity like R&B and pop, I hypothesize that these trends are connected with the modern day music scene. Collaboration between artists at the top of their field has become more commonplace, even with some mega-tracks like "Forever" with verses from Eminem, Kanye West, Drake, and Lil Wayne all in the same song. These collaborations can create songs with blended styles, which even furthers the development of rap as a unique genre.
 
 
+## Pop
+
+Who hasn't been in a "aaah, I know this song" moment but didn't know where they knew it from?  Or even worse, singing the lyrics of a song you hate because you couldn't help but memorize them since the track was playing everywhere. Chances are, you heard that tune on the car radio when your phone's battery died or maybe even at the store when you went to buy a charger for your phone. These songs that we often find impossible to get out of our head are in many cases top hit songs; hence the reason they're everywhere. But what makes these popular songs.
+
+We cannot talk about popular music without crossing pop music. In fact, the terms popular music and pop music are often used interchangeably. This genre has a formula that charges up our adrenaline levels and give us no choice but to dance to the beat, even if it was only a couple of shoulder shrugs. I personally find myself helpless to a good pop beat. Nevertheless, not all pop music give us the same adrenaline rush; popular ones seem to have a twist in the formula.
+
+I am curious whether popular pop tracks have different attributes that make them hit the top chart lists. And so, I want to compare the data for the features of tracks to see if the secret for their success lies in technical features.
+
+
+```{r fig.width = 9, fig.length = 6}
+feature_names <- names(spotify)[12:23]
+
+spotify %>% 
+  filter(playlist_genre == "pop") %>% 
+  mutate(is_popular = ifelse(track_popularity >= 75, T, F)) %>% 
+  select(c(is_popular, feature_names)) %>%
+  pivot_longer(cols = feature_names) %>%
+  ggplot(aes(x = value)) +
+  geom_density(aes(color = is_popular), alpha = 0.5) +
+  facet_wrap(~name, ncol = 3, scales = 'free') +
+  labs(title = "Popular vs. Unpopular Spotify Music of the Popular Genre",
+       subtitle = "General trends for each song characteristic seems to be similar across popular and non-popular songs",
+       x = element_blank(), 
+       y = element_blank()) +
+  theme(axis.text.y = element_blank()) +
+  scale_color_discrete(name = element_blank(), 
+                       labels = c("unpopular", "popular")) +
+  theme_classic()
+```
+
+The most distinguishable difference that makes popular pop tracks stand out is their danceability. This can be seen from the peak shifted to the right for danceabilty. Danceability describes how suitable a track is for dancing based on a combination of musical elements including tempo, rhythm stability, beat strength, and overall regularity. This outcome makes sense as the essence of pop music is music that makes you want to dance.
+One thing that surprised me was to see that popular pop tracks tend to have slightly lower energy and values, a perceptual measure of intensity and activity. Typically, energetic tracks feel fast, loud, and noisy. Nevertheless, it can be said that these technical features aren't what distinguish the tracks that make it to the top charts. Instead, they rely on more attributes like a good rhythm, a catchy melody, and are easy to remember and sing along to. 
 
 ## R&B
 
@@ -185,10 +218,26 @@ In this section, I want to take a closer look at one of my favorite genres of mu
 
 ```{r}
 randb %>%
-  select(track_name, track_artist, playlist_genre, playlist_subgenre, track_popularity, danceability, energy, loudness, mode, speechiness, acousticness, instrumentalness, liveness, valence, duration_ms) %>%
+  select(track_name, track_artist, playlist_subgenre, track_popularity, danceability, energy, loudness, mode, speechiness, acousticness, instrumentalness, liveness, valence, duration_ms) %>%
   arrange(desc(track_popularity)) %>%
   head(12) %>%
-  knitr::kable() 
+  gt(
+    rowname_col = "track_name") %>%
+  tab_header(title = "Song Characteristics of the top 10 most popular R&B songs") %>%
+  cols_label(
+    playlist_subgenre = "Subgenre",
+    track_popularity = "Popularity Score",
+    danceability = "Danceability",
+    energy = "Energy",
+    loudness = "Loudness",
+    mode = "Mode",
+    speechiness = "Speechiness",
+    acousticness = "Acousticness",
+    instrumentalness = "Instrumentalness",
+    liveness = "Liveness",
+    valence = "Valence",
+    duration_ms = "Song Length (ms)"
+    )
 ```
 
 Above are the top 10 most popular songs in the R&B genre (12 songs were pulled from the dataset to account for 2 songs that were each in 2 different subgenres -- Arizona Zeravas' *Roxanne* and The Weeknd's *Blinding Lights*. We can see that all of them were released in 2019 and all categorized under my two favorite two subgenres of R&B, Urban Contemporary and Hip Pop. All of them also boast a danceability score of above 0.5, with most of them (with the exception of Maroon 5's *Memories* and Billie Eilish's *everything i wanted*) having energy scores of above 0.5. We can also see that across the board, all 10 songs have low speechiness and instrumentalness scores (with the exception of Billie Eilish's *everything i wanted*. Interestingly, all of the songs fall within a valence of 0.2-0.6. The other characteristics are quite varied. So, for the purposes of my analysis of the R&B genre, I will only focus on the song characteristics that have clear trends across the genre -- danceabiility, energy, speechiness, instrumentalness, and valence.
@@ -217,7 +266,7 @@ anim_save("randb_density.gif")
 knitr::include_graphics("randb_density.gif")
 ```
 
-In the density plot above, Neo-Soul and New Jack Swing both seem to have a lot of popular songs on the lower end of the spectrum (75-85), with Urban Contemporary and Hip Pop following similar trends, but in comparison to the other two genres, their density curves are not as large, signaling that the former two genres have more songs classified as "popular" than teh latter two.
+In the density plot above, Neo-Soul and New Jack Swing both seem to have a lot of popular songs on the lower end of the spectrum (75-85), with Urban Contemporary and Hip Pop following similar trends, but in comparison to the other two genres, their density curves are not as large, signaling that the former two genres have more songs classified as "popular" than the latter two.
 
 I believe that this trend could be occurring because of the huge increase in the production of hip pop and urban contemporary music. With streaming services such as Spotify making it easier than ever for small creators to attain platforms and with the advancement of technology making it easier to produce and release music from one's own bedroom, this may be because of the oversaturation of the music industry -- there are more songs being released than ever.
 
@@ -225,8 +274,16 @@ I believe that this trend could be occurring because of the huge increase in the
 randb %>%
   group_by(playlist_subgenre) %>%
   summarize(num_of_songs = n(), avg_pop = mean(track_popularity)) %>%
-  knitr::kable() 
+  gt(
+    rowname_col = "playlist_subgenre") %>%
+  tab_header(title = "Number of popular songs in each subgenre and their average popularities") %>%
+  cols_label(
+    playlist_subgenre = "Subgenre",
+    num_of_songs = "Number of Songs",
+    avg_pop = "Average Popularity Score"
+    )
 ```
+
 
 Despite the large density curves, on average, hip pop and urban contemporary are slightly more popular than the Neo-Soul and New Jack Swing. Another interesting observation we can make is the sheer lack of popular songs for Neo-Soul and New Jack Swing. 
 
@@ -237,12 +294,24 @@ As I move forward in my analysis to look at the specific characteristics of popu
 ### Taking a closer look at the specific characteristics of popular songs in the Hip-Pop and Urban Contemporary Subgenres
 
 ```{r}
-randb2 <-randb %>%
+randb %>%
   group_by(playlist_subgenre) %>%
   filter(playlist_subgenre == c("hip pop", "urban contemporary")) %>%
-  summarise_at(c("track_popularity", "danceability", "energy", "speechiness", "instrumentalness", "valence"), mean, na.rm = TRUE)
-  #knitr::kable() 
+  summarise_at(c("track_popularity", "danceability", "energy", "speechiness", "instrumentalness", "valence"), mean, na.rm = TRUE) %>%
+   gt(
+    rowname_col = "playlist_subgenre") %>%
+  tab_header(title = "Taking a closer look at the average characteristics for popular Hip Pop and Urban Contemporary songs") %>%
+  cols_label(
+    playlist_subgenre = "Subgenre",
+    track_popularity = "Avg. Popularity Score",
+    danceability = "Danceability",
+    energy = "Energy",
+    speechiness = "Speechiness",
+    instrumentalness = "Instrumentalness",
+    valence = "Valence"
+    )
 ```
+
 
 Looking at the table above, we see that the values for each characteristic are nearly identical, often just 0.01 off from each other. Additionally, with the popularity of the two subgenres being so close to each other, it's safe to say that high danceability, energy, and valence are traits that are seen in popular songs of both subgenres -- Hip Pop and Urban Contemporary. On the contrary, popular songs of both subgenres are speechiness and instrumentalness This does make logical sense, as R&B is often on the slower, smoother side, hence the low speechiness (contrary to rap). 
 
@@ -250,39 +319,7 @@ For popular songs of the two subgenres where high danceability, energy, and vale
 
 ### R&B -- Analysis Conclusion
 
-All in all, I believe that R&B follows overall trends of popular music across all genres, as seen with the high values for danceability, valence, and energy. The defining difference, and what sets R&B apart from the other genres, is the low values for instrumentalness and speechiness. I also discovered that what I love abour R&B is actuallly what makes it popular! Hopefully, these discoveries and my analysis of genre's characrteristics will help me and others find more relevant R&B recommendations.
-
-## Pop
-
-Who hasn't been in a "aaah, I know this song" moment but didn't know where they knew it from?  Or even worse, singing the lyrics of a song you hate because you couldn't help but memorize them since the track was playing everywhere. Chances are, you heard that tune on the car radio when your phone's battery died or maybe even at the store when you went to buy a charger for your phone. These songs that we often find impossible to get out of our head are in many cases top hit songs; hence the reason they're everywhere. But what makes these popular songs.
-
-We cannot talk about popular music without crossing pop music. In fact, the terms popular music and pop music are often used interchangeably. This genre has a formula that charges up our adrenaline levels and give us no choice but to dance to the beat, even if it was only a couple of shoulder shrugs. I personally find myself helpless to a good pop beat. Nevertheless, not all pop music give us the same adrenaline rush; popular ones seem to have a twist in the formula.
-
-I am curious whether popular pop tracks have different attributes that make them hit the top chart lists. And so, I want to compare the data for the features of tracks to see if the secret for their success lies in technical features.
-
-
-```{r}
-feature_names <- names(spotify)[12:23]
-
-spotify %>% 
-  filter(playlist_genre == "pop") %>% 
-  mutate(is_popular = ifelse(track_popularity >= 75, T, F)) %>% 
-  select(c(is_popular, feature_names)) %>%
-  pivot_longer(cols = feature_names) %>%
-  ggplot(aes(x = value)) +
-  geom_density(aes(color = is_popular), alpha = 0.5) +
-  facet_wrap(~name, ncol = 3, scales = 'free') +
-  labs(title = "Popular vs. Unpopular Spotify Audio Feature Density",
-       x = element_blank(), 
-       y = element_blank()) +
-  theme(axis.text.y = element_blank()) +
-  scale_color_discrete(name = element_blank(), 
-                       labels = c("unpopular", "popular"))
-
-```
-
-Looking at the data from the plot above, it seems that the most distinguishable difference that makes popular pop tracks stand out is their danceability. This can be seen from the peak shifted to the right for danceabilty. One thing that surprised me was to see that popular pop tracks tend to have slightly lower energy and loudness values. It seems that popular pop tracks tend to focus on other aspects to make the song feel more energizable. Nevertheless, it can be said that these technical features aren't what distinguish the tracks that make it to the top charts.
-
+All in all, I believe that R&B follows overall trends of popular music across all genres, as seen with the high values for danceability, valence, and energy. The defining difference, and what sets R&B apart from the other genres, is the low values for instrumentalness and speechiness. I also discovered that what I love about R&B is actually what makes it popular! Hopefully, these discoveries and my analysis of genre's characrteristics will help me and others find more relevant R&B recommendations.
 
 # What now? Why is our analysis important?
 
