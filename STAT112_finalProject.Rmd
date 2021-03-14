@@ -132,7 +132,7 @@ Oddly, the biggest conclusion I drew from this graph was not any positive or neg
 Beyond the stats, there was one more observation I wanted to make on rap music. Based on my experience listening to rap, some of my favorite songs are remixes, features, or any other way multiple artists can put verses on the same song. Songs like "Life is Good" by Drake and Future, or remixes to songs like "HIGHEST IN THE ROOM" which incorporates Lil Baby in a song by Travis Scott add a certain level of freshness and break up three consecutive minutes of one artist rapping into fun back and forths with styles. Below is a graphic comparing the popularity rates of those songs vs solo songs between rap and other genres.
 
 ```{r fig.width = 9, fig.length = 6}
-spotify %>% 
+Multiple_Artist_Graph <- spotify %>% 
   mutate(track_name_lower = str_to_lower(track_name),
          remix = str_detect(track_name_lower, "Remix"),
          feature = str_detect(track_name_lower, "feat"),
@@ -144,7 +144,7 @@ spotify %>%
   summarize(prop_pop = mean(popular)*100) %>% 
   mutate(genre = fct_relevel(playlist_genre, "rap")) %>% 
   ggplot() +
-  geom_col(aes(x = multiple_artists, y = prop_pop)) +
+  geom_col(aes(x = multiple_artists, y = prop_pop), fill = "black") +
   facet_wrap(~genre) +
   labs(title = "Popularity of Songs Containing Mulitple Artists Across Genre",
        x = "", y = "Percent of Songs Popular") +
@@ -152,6 +152,8 @@ spotify %>%
   theme(plot.title.position = "plot",
         plot.title = element_text(size = 20, face = "bold"),
         plot.subtitle = element_text(size = 10, face = "italic"))
+
+ggplotly(Multiple_Artist_Graph)
 ```
 
 Rap had the largest change between songs with multiple artists and song with only one, with a gap of 10%. Based on other genres' disparity like R&B and pop, I hypothesize that these trends are connected with the modern day music scene. Collaboration between artists at the top of their field has become more commonplace, even with some mega-tracks like "Forever" with verses from Eminem, Kanye West, Drake, and Lil Wayne all in the same song. These collaborations can create songs with blended styles, which even furthers the development of rap as a unique genre.
