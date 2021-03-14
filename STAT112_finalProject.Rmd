@@ -1,8 +1,18 @@
 ---
 title: "What makes a song popular?"
+subtitle: "A musical analysis of popular songs and their characteristics"
 author: "Alex Ismail, Malek Kaloti, Brian Lee"
-date: "3/10/2021"
-output: html_document
+date: "13 March 2021"
+output: 
+  html_document:
+    keep_md: TRUE
+    toc: TRUE
+    toc_float: TRUE
+    df_print: paged
+    code_download: true
+    code_folding: hide
+
+      
 ---
 
 ```{r setup, include=FALSE}
@@ -101,7 +111,7 @@ prelim_graph
 The box plot above compares distribution of song popularity by genre again, however this time including the songs not deemed popular. EDM music is noticeably behind in median popularity compared to the universal median of ~40, while pop, latin, and to lesser degree rap show a slight advantage over the other genres in median.
 
 
-# Analysis!
+# Analysis: Diving deeper into our favorite genres
 
 ## Rap
 
@@ -232,7 +242,7 @@ A quick Google search will reveal that both Neo-Soul and New Jack Swing were sub
 
 As I move forward in my analysis to look at the specific characteristics of popular R&B songs, I will restrict myself to the two subgenres with more cases to look at and my person two favorite subgenres -- Hip-Pop and Urban Contemporary.
 
-### Taking a closer look at the specific characteristis of popular songs in the Hip-Pop and Urban Contemporary Subgenres
+### Taking a closer look at the specific characteristics of popular songs in the Hip-Pop and Urban Contemporary Subgenres
 
 ```{r}
 randb %>%
