@@ -178,6 +178,37 @@ ggplotly(Multiple_Artist_Graph)
 Rap had the largest change between songs with multiple artists and song with only one, with a gap of 10%. Based on other genres' disparity like R&B and pop, I hypothesize that these trends are connected with the modern day music scene. Collaboration between artists at the top of their field has become more commonplace, even with some mega-tracks like "Forever" with verses from Eminem, Kanye West, Drake, and Lil Wayne all in the same song. These collaborations can create songs with blended styles, which even furthers the development of rap as a unique genre.
 
 
+## Pop
+
+Who hasn't been in a "aaah, I know this song" moment but didn't know where they knew it from?  Or even worse, singing the lyrics of a song you hate because you couldn't help but memorize them since the track was playing everywhere. Chances are, you heard that tune on the car radio when your phone's battery died or maybe even at the store when you went to buy a charger for your phone. These songs that we often find impossible to get out of our head are in many cases top hit songs; hence the reason they're everywhere. But what makes these popular songs.
+
+We cannot talk about popular music without crossing pop music. In fact, the terms popular music and pop music are often used interchangeably. This genre has a formula that charges up our adrenaline levels and give us no choice but to dance to the beat, even if it was only a couple of shoulder shrugs. I personally find myself helpless to a good pop beat. Nevertheless, not all pop music give us the same adrenaline rush; popular ones seem to have a twist in the formula.
+
+I am curious whether popular pop tracks have different attributes that make them hit the top chart lists. And so, I want to compare the data for the features of tracks to see if the secret for their success lies in technical features.
+
+
+```{r}
+feature_names <- names(spotify)[12:23]
+
+spotify %>% 
+  filter(playlist_genre == "pop") %>% 
+  mutate(is_popular = ifelse(track_popularity >= 75, T, F)) %>% 
+  select(c(is_popular, feature_names)) %>%
+  pivot_longer(cols = feature_names) %>%
+  ggplot(aes(x = value)) +
+  geom_density(aes(color = is_popular), alpha = 0.5) +
+  facet_wrap(~name, ncol = 3, scales = 'free') +
+  labs(title = "Popular vs. Unpopular Spotify Audio Feature Density",
+       x = element_blank(), 
+       y = element_blank()) +
+  theme(axis.text.y = element_blank()) +
+  scale_color_discrete(name = element_blank(), 
+                       labels = c("unpopular", "popular"))
+
+```
+
+Looking at the data from the plot above, it seems that the most distinguishable difference that makes popular pop tracks stand out is their danceability. This can be seen from the peak shifted to the right for danceabilty. Danceability describes how suitable a track is for dancing based on a combination of musical elements including tempo, rhythm stability, beat strength, and overall regularity. This outcome makes sense as the essence of pop music is music that makes you want to dance.
+One thing that surprised me was to see that popular pop tracks tend to have slightly lower energy and values, a perceptual measure of intensity and activity. Typically, energetic tracks feel fast, loud, and noisy. Nevertheless, it can be said that these technical features aren't what distinguish the tracks that make it to the top charts. Instead, they rely on more attributes like a good rhythm, a catchy melody, and are easy to remember and sing along to. 
 
 ## R&B
 
@@ -246,38 +277,6 @@ randb %>%
   knitr::kable() 
 # Add graph
 ```
-
-## Pop
-
-Who hasn't been in a "aaah, I know this song" moment but didn't know where they knew it from?  Or even worse, singing the lyrics of a song you hate because you couldn't help but memorize them since the track was playing everywhere. Chances are, you heard that tune on the car radio when your phone's battery died or maybe even at the store when you went to buy a charger for your phone. These songs that we often find impossible to get out of our head are in many cases top hit songs; hence the reason they're everywhere. But what makes these popular songs.
-
-We cannot talk about popular music without crossing pop music. In fact, the terms popular music and pop music are often used interchangeably. This genre has a formula that charges up our adrenaline levels and give us no choice but to dance to the beat, even if it was only a couple of shoulder shrugs. I personally find myself helpless to a good pop beat. Nevertheless, not all pop music give us the same adrenaline rush; popular ones seem to have a twist in the formula.
-
-I am curious whether popular pop tracks have different attributes that make them hit the top chart lists. And so, I want to compare the data for the features of tracks to see if the secret for their success lies in technical features.
-
-
-```{r}
-feature_names <- names(spotify)[12:23]
-
-spotify %>% 
-  filter(playlist_genre == "pop") %>% 
-  mutate(is_popular = ifelse(track_popularity >= 75, T, F)) %>% 
-  select(c(is_popular, feature_names)) %>%
-  pivot_longer(cols = feature_names) %>%
-  ggplot(aes(x = value)) +
-  geom_density(aes(color = is_popular), alpha = 0.5) +
-  facet_wrap(~name, ncol = 3, scales = 'free') +
-  labs(title = "Popular vs. Unpopular Spotify Audio Feature Density",
-       x = element_blank(), 
-       y = element_blank()) +
-  theme(axis.text.y = element_blank()) +
-  scale_color_discrete(name = element_blank(), 
-                       labels = c("unpopular", "popular"))
-
-```
-
-Looking at the data from the plot above, it seems that the most distinguishable difference that makes popular pop tracks stand out is their danceability. This can be seen from the peak shifted to the right for danceabilty. One thing that surprised me was to see that popular pop tracks tend to have slightly lower energy and loudness values. It seems that popular pop tracks tend to focus on other aspects to make the song feel more energizable. Nevertheless, it can be said that these technical features aren't what distinguish the tracks that make it to the top charts.
-
 
 # What now? Why is our analysis important?
 
