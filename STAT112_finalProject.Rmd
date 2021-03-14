@@ -45,21 +45,35 @@ randb <- spotify %>%
 
 # Introduction & Background
 
-<<<<<<< HEAD
-A noticeable trend in the entertainment industry has been the transformation from physical to digitalized content. Newspapers are replaced with online articles, Netflix replaced Blockbuster, and online music streaming sites like Spotify have taken over traditonal music media as the primary source of music for millions. In addition to expanding the reach of music to new people, the transition to using Spotify has come with new ways to analyze music tastes, both individually and as a population. Spotify users have access to new daily playlists tailor made for them, in addition to having suggested music based of the data provided to Spotify of listening habits. 
-=======
+A noticeable trend in the entertainment industry has been the transformation from physical to digitalized content. Newspapers are replaced with online articles, Netflix replaced Blockbuster, and online music streaming sites like Spotify have taken over traditonal music media as the primary source of music for millions. In addition to expanding the reach of music to new people, the transition to using Spotify has come with new ways to analyze music tastes, both individually and as a population. Spotify users have access to new daily playlists tailored to their individual preferences, in addition to having suggested music based of the data provided to Spotify of listening habits. In our analysis of the characteristics of songs, we hope to make obserations to help pinpoint what exactly makes a song popular.
 
-Who hasn't been in a "aaah, I know this song" moment but didn't know where they knew it from?  Or even worse, singing the lyrics of a song you hate because you couldn't help but memorize them since the track was playing everywhere. Chances are, you heard that tune on the car radio when your phone's battery died or maybe even at the store when you went to buy a charger for your phone. 
+## Codebook of variables
+These variables and definitions were retrieved directly from the dataset's repository.
 
-
-
-The 
-Why did we do an analysis on spotify? Why is the data significant & why should people care? Introduce the data to audience
-
+name                      definition
+---------                 ------------------------
+track_id                  Song unique ID
+track_name                Song Name
+track_artist              Song Artist
+track_popularity          Song Popularity (0-100) where higher is better
+track_album_id	          Album unique ID
+track_album_name	        Song album name
+track_album_release_date	Date when album released
+playlist_name	            Name of playlist
+playlist_id               Playlist ID
+playlist_genre	          Playlist genre
+playlist_subgenre	        Playlist subgenre
+danceability	            Danceability describes how suitable a track is for dancing                            based on a combination of musical elements including tempo,                           rhythm stability, beat strength, and overall regularity. A                            value of 0.0 is least danceable and 1.0 is most danceable.
+energy	                  Energy is a measure from 0.0 to 1.0 and represents a
+                          perceptual measure of intensity and activity. Typically,                              energetic tracks feel fast, loud, and noisy. For example,                             death metal has high energy, while a Bach prelude scores low                           on the scale. Perceptual features contributing to this
+                          attribute include dynamic range, perceived loudness, timbre,
+                          onset rate, and general entropy.
 
 ## Data Collection
 Data was retrieved from github:
 https://github.com/rfordatascience/tidytuesday/blob/faca0b6bd282998693007c329e3f4b917a5fd7a8/data/2020/2020-01-21/readme.md
+
+Retrieved from a past Tidy Tuesday dataset, we will be using data from Spotify for our analysis. The link to the repository can be can be accessed [here](https://github.com/rfordatascience/tidytuesday/blob/faca0b6bd282998693007c329e3f4b917a5fd7a8/data/2020/2020-01-21/readme.md)
 
 Using data provided by Spotify, we will investigate how certain aspects of a song, such as genre, subgenre, release date, and other more complex measurements correlate to how popular a song is according to Spotify. Popularity is rated on a scale to 100 with the most popular songs on Spotify as of February 2020 will have a score near 100. We identified popularity scores greater than 75 to be a convenient threshold to deem a song "popular".
 
