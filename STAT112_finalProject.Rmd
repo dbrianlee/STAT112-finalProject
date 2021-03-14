@@ -247,11 +247,14 @@ randb %>%
 
 As it becomes easier to produce and release music from one's own bedroom and streaming platforms such as Apple Music and Spotify increasingly making music accessible to everyone, we believe our analysis has important implications which can help listeners find new songs that they like and help platforms build algorithms that give better and more relevant song recommendations to its users. 
 
-### A disclaimer: Correlation does no equal causation.
+### An Acknowledgement: Correlation does no equal causation.
 
-Of course, carrelation does not equal causation. Just because the 
+As we close our analysis of what makes a song popular, it would be remiss if we did not acknowledge that just because we have identified certain characteristics that make a song have a high popularity rating, it does not necessarily mean that *if* a certain song has all the preferred characteristics that we mentioned in our analyses, it *will* be popular, as we can never know whether or not something will with 100% certainly. 
+There is also a factor of human behavior that we simply cannot predict using data science. We can try our best to follow trends and to look at graphs, but trying to predict whether or not a song willl be well liked by its audience is something that must be taken with a grain of salt. At its core, the purpose of our analysis was simply to make general observations about trends that caught the eye -- not to predict with complete certainty the popularity of a song.
 
-## A Conclusion
+## Possibilities for further analysis & A Conclusion
+If we had more time, we believe it would be fascinating and useful to build a shiny app where people coul adjust their preferences for features they look for in songs their favorite songs (eg. high danceability, low valence, etc.) so that the app could return recommended songs with similar values. Or, we could have users input their favorite songs to find recommendations based on similar characteristic and song attributes. We could also create playlists, similar to what Spotify does. By determining recommended values for different moods and purposes such as relaxation, meditating, and studying, it would be intersting to see how accurate these playlists are. Again, as we mentioned in the previous section, we cannot predict human judgement, so we do expect some level of human error in determining the "correctness" of the playlists. The possibilities with this dataset are endless!
+
 Thanks to streaming platforms such as Spotify and Apple Music, small creators are also given a platform for creative release. Our analyses of pop, rap, and R&B, can also help small artists grow their own platforms to cater to the interests of specific audiences. In a time such as now when the consumption of art (whether it be in the form of movies, music, or television), is essential to one's mental wellbeing, our analysis can help boost these efforts. By asking the question, "What makes a song in a given genre popular?" We have taken a close look at the specific characteristics of songs with a popularity rating of 75 or higher.
 
 
