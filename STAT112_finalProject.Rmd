@@ -48,8 +48,6 @@ randb <- spotify %>%
 A noticeable trend in the entertainment industry has been the transformation from physical to digitalized content. Newspapers are replaced with online articles, Netflix replaced Blockbuster, and online music streaming sites like Spotify have taken over traditonal music media as the primary source of music for millions. In addition to expanding the reach of music to new people, the transition to using Spotify has come with new ways to analyze music tastes, both individually and as a population. Spotify users have access to new daily playlists tailored to their individual preferences, in addition to having suggested music based of the data provided to Spotify of listening habits. In our analysis of the characteristics of songs, we hope to make obserations to help pinpoint what exactly makes a song popular.
 
 ## Data Collection
-Data was retrieved from github:
-https://github.com/rfordatascience/tidytuesday/blob/faca0b6bd282998693007c329e3f4b917a5fd7a8/data/2020/2020-01-21/readme.md
 
 Retrieved from a past Tidy Tuesday dataset, we will be using data from Spotify for our analysis. The link to the repository can be can be accessed [here](https://github.com/rfordatascience/tidytuesday/blob/faca0b6bd282998693007c329e3f4b917a5fd7a8/data/2020/2020-01-21/readme.md)
 
@@ -80,7 +78,7 @@ genre_pop <- spotify %>%
 ggplotly(genre_pop)
 ```
 
-The graph above shows how track popularity has trended by genre since. Though Spotify has a wide variety of songs, based on the plot rock is the only genre that has any significant foundations of popular songs from before the 1980s and 90s. Since then however, song popularity across every genre has experienced exponential growth in popularity, most notably pop and edm.
+The graph above shows how track popularity has trended by genre since. Though Spotify has a wide variety of songs, based on the plot rock is the only genre that has any significant foundations of popular songs from before the 1980s and 90s. Since then however, song popularity across every genre has experienced exponential growth in popularity, most notably with the introduction of pop and edm. As music becomes easier to produce and release from informal settings, today, a studio and expensive equipment are not necessary to make good music. This is also show in the visualization above with the quantity of cases dramtically increasing with teh advent of teh 21st century.
 
 
 ## How does does song popularity vary based on genre?
@@ -239,13 +237,20 @@ As I move forward in my analysis to look at the specific characteristics of popu
 ### Taking a closer look at the specific characteristics of popular songs in the Hip-Pop and Urban Contemporary Subgenres
 
 ```{r}
-randb %>%
+randb2 <-randb %>%
   group_by(playlist_subgenre) %>%
   filter(playlist_subgenre == c("hip pop", "urban contemporary")) %>%
-  summarise_at(c("track_popularity", "danceability", "energy", "speechiness", "instrumentalness", "valence"), mean, na.rm = TRUE) %>%
-  knitr::kable() 
-# Add graph
+  summarise_at(c("track_popularity", "danceability", "energy", "speechiness", "instrumentalness", "valence"), mean, na.rm = TRUE)
+  #knitr::kable() 
 ```
+
+Looking at the table above, we see that the values for each characteristic are nearly identical, often just 0.01 off from each other. Additionally, with the popularity of the two subgenres being so close to each other, it's safe to say that high danceability, energy, and valence are traits that are seen in popular songs of both subgenres -- Hip Pop and Urban Contemporary. On the contrary, popular songs of both subgenres are speechiness and instrumentalness This does make logical sense, as R&B is often on the slower, smoother side, hence the low speechiness (contrary to rap). 
+
+For popular songs of the two subgenres where high danceability, energy, and valence, are prevalent, I believe that this follows general trends across genres, where people want to listen to upbeat, energetic music that they can dance to. Apparently, R&B listeners tend to be in favor of songs that have vocal singing without many lyrics due to the low speechiness value and instrumentalness values -- songs with lots of "oohs" and "ahs", as defined by the codebook on the repository page which says that the closer intrumentalness is to 1.0, the greater likelihood the track contains no vocal content. It also notes that “Ooh” and “aah” sounds are treated as instrumental in this context. 
+
+### R&B -- Analysis Conclusion
+
+All in all, I believe that R&B follows overall trends of popular music across all genres, as seen with the high values for danceability, valence, and energy. The defining difference, and what sets R&B apart from the other genres, is the low values for instrumentalness and speechiness. I also discovered that what I love abour R&B is actuallly what makes it popular! Hopefully, these discoveries and my analysis of genre's characrteristics will help me and others find more relevant R&B recommendations.
 
 ## Pop
 
