@@ -35,6 +35,8 @@ randb <- spotify %>%
 
 # Introduction & Background
 
+
+Who hasn't been in a "aaah, I know this song" moment but didn't know where they knew it from?  Or even worse, singing the lyrics of a song you hate because you couldn't help but memorize them since the track was playing everywhere. Chances are, you heard that tune on the car radio when your phone's battery died or maybe even at the store when you went to buy a charger for your phone. The 
 Why did we do an analysis on spotify? Why is the data significant & why should people care? Introduce the data to audience
 
 Using this dataset, we hope to study to technicalities of music anbd
