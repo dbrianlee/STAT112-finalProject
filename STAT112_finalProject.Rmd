@@ -95,7 +95,7 @@ prelim_graph
 
 Rap is a particularly fascinating genre to investigate using the Spotify data to look at what traits of music have correlated with popularity as the genre has undergone several changes in audience and style. Though a relatively new genre arriving on the greater music scene in the 80s, rap has undergone a myriad of trends and style variations. Fans of old school rap from the 80s and 90s may have distaste for today's artists like Drake and Eminem for having modernized the genre too much. Fans of modern rap may get bored of the authentic sound of artists like Run-DMC or Tupac. Are there trends that tie all of rap together as to what makes a song popular? 
 
-###Song Quality
+### Song Quality
 
 The first and most natural observations to make are on overarching metrics that Spotify provides. Using the descriptions provided, I was most interested on the following values in correlation to track popularity: Danceability due to rap's heavy emphasis on rhythm and beats, Energy due to some artists' signature style of shouting to "hype" up a crowd (ie. Lil Jon, DMX), the inverse variables of Speechiness/Instrumentalness due to other artist's signature of rapping as fast as possible (ie. Eminem, Busta Rhymes), and Valence for the perceived association between rap and violence, drugs, and focus on other less-than-righteous topics.
 
@@ -130,7 +130,7 @@ spotify_rap %>%
 
 Oddly, the biggest conclusion I drew from this graph was not any positive or negative correlation, but a lack of connection between valence and popularity. For a genre that has a reputation for being connected with gangs, guns, drugs, etc., there is a complete lack of correlation between valence and popularity. Beyond that, there is a moderately strong correlation between popularity and danceability, as I had expected based on the prevalence of beats and rhythms in rap. The energy line shows that the highest percentage of songs to become popular are ~.5 energy, which likely suggests too much energy can take away from the popularity of a song. Finally, the speechiness/instrumentalness variable shows that songs on the extreme end of speechiness (.8+) are most likely to be popular.
 
-###Do songs with multiple artists become popular at a higher rate?
+### Do songs with multiple artists become popular at a higher rate?
 
 Beyond the stats, there was one more observation I wanted to make on rap music. Based on my experience listening to rap, some of my favorite songs are remixes, features, or any other way multiple artists can put verses on the same song. Songs like "Life is Good" by Drake and Future, or remixes to songs like "HIGHEST IN THE ROOM" which incorporates Lil Baby in a song by Travis Scott add a certain level of freshness and break up three consecutive minutes of one artist rapping into fun back and forths with styles. Below is a graphic comparing the popularity rates of those songs vs solo songs between rap and other genres.
 
